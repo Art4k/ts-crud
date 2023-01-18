@@ -1,7 +1,7 @@
 {
-  "name": "atsakymai",
+  "name": "ts-crud-artur-lastovskij",
   "version": "1.0.0",
-  "description": "",
+  "description": "ts crud atsiskaitymas",
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.prod.js",
