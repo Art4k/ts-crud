@@ -1,4 +1,4 @@
-type StringifyObjectProps<Type extends Object> = {
+export type StringifyObjectProps<Type extends Object> = {
   [Key in keyof Type]: string;
 };
 
