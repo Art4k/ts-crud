@@ -13,6 +13,10 @@ class App {
 
   private carsCollection: CarsCollection;
 
+  private selectedBrandId: null | string;
+
+  private carTable: Table;
+
   private filterByBrand: SelectField;
 
   constructor(selector: string) {
@@ -25,10 +29,35 @@ class App {
     this.htmlElement = foundElement;
     this.filterByBrand = new SelectField({
       label: "BrandName",
-      onChange: console.log("Filtruoja !"),
+      onChange: this.handleBrandChange,
       options: brands.map(({ id, title }) => ({ title, value: id })),
     });
   }
+
+  private handleBrandChange = (brandId: string): void => {
+    this.selectedBrandId = brandId;
+
+    this.update();
+  };
+
+  private update = (): void => {
+    const { selectedBrandId, carsCollection } = this;
+
+    if (selectedBrandId === null) {
+      this.carTable.updateProps({
+        title: "Visi automobiliai",
+        rowsData: carsCollection.getAllCars.map(stringifyProps),
+      });
+    } else {
+      const brand = brands.find((b) => b.id === selectedBrandId);
+      if (brand === undefined) throw new Error("Pasirinktos markės nėra");
+
+      this.carTable.updateProps({
+        title: `${brand.title} markės automobiliai`,
+        rowsData: carsCollection.getByBrandId(selectedBrandId).map(stringifyProps),
+      });
+    }
+  };
 
   initialize = (): void => {
     const carTable = new Table({
