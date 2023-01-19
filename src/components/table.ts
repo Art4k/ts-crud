@@ -85,6 +85,19 @@ class Table<Type extends RowData> {
     this.htmlElement.className = "table table-striped order border p-3";
     this.htmlElement.append(this.thead, this.tbody);
   };
+
+  private renderView = (): void => {
+    this.initialize();
+  };
+
+  public updateProps = (newProps: Partial<TableProps<Type>>): void => {
+    this.props = {
+      ...this.props,
+      ...newProps,
+    };
+
+    this.renderView();
+  };
 }
 
 export default Table;
