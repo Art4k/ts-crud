@@ -1,6 +1,7 @@
 import CarsCollection from "../helpers/cars-collection";
-import stringifyProps from "../helpers/stingify-object";
+import stringifyProps, { StringifyObjectProps } from "../helpers/stingify-object";
 
+import CarJoined from "../types/car-joined";
 import Table from "./table";
 import SelectField from "./selectfield";
 // Data imports
@@ -15,23 +16,39 @@ class App {
 
   private selectedBrandId: null | string;
 
-  private carTable: Table;
+  private carTable: Table<StringifyObjectProps<CarJoined>>;
 
   private filterByBrand: SelectField;
 
   constructor(selector: string) {
     const foundElement = document.querySelector<HTMLElement>(selector);
+    if (foundElement === null) throw new Error(`Nerastas elementas su selektoriumi '${selector}'`);
 
     this.carsCollection = new CarsCollection({ cars, brands, models });
 
-    if (foundElement === null) throw new Error(`Nerastas elementas su selektoriumi '${selector}'`);
+    this.carTable = new Table({
+      title: "Visi automobiliai",
+      columns: {
+        id: "Id",
+        brand: "Markė",
+        model: "Modelis",
+        price: "Kaina",
+        year: "Metai",
+      },
+      rowsData: this.carsCollection.getAllCars.map(stringifyProps),
+    });
 
-    this.htmlElement = foundElement;
     this.filterByBrand = new SelectField({
       label: "BrandName",
       onChange: this.handleBrandChange,
       options: brands.map(({ id, title }) => ({ title, value: id })),
     });
+
+    this.selectedBrandId = null;
+
+    this.htmlElement = foundElement;
+
+    this.initialize();
   }
 
   private handleBrandChange = (brandId: string): void => {
@@ -50,7 +67,7 @@ class App {
       });
     } else {
       const brand = brands.find((b) => b.id === selectedBrandId);
-      if (brand === undefined) throw new Error("Pasirinktos markės nėra");
+      if (brand === undefined) throw new Error("Pasirinkta neegzistuojanti markė");
 
       this.carTable.updateProps({
         title: `${brand.title} markės automobiliai`,
@@ -60,20 +77,9 @@ class App {
   };
 
   initialize = (): void => {
-    const carTable = new Table({
-      title: "Visi automobiliai",
-      columns: {
-        id: "Id",
-        brand: "Markė",
-        model: "Modelis",
-        price: "Kaina",
-        year: "Metai",
-      },
-      rowsData: this.carsCollection.getAllCars.map(stringifyProps),
-    });
     const container = document.createElement("div");
     container.className = "container my-5";
-    container.appendChild(carTable.htmlElement);
+    container.append(this.filterByBrand.htmlElement, this.carTable.htmlElement);
 
     this.htmlElement.append(container);
   };
