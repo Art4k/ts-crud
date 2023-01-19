@@ -39,7 +39,7 @@ class App {
     });
 
     this.filterByBrand = new SelectField({
-      label: "BrandName",
+      label: "Modelis",
       onChange: this.handleBrandChange,
       options: brands.map(({ id, title }) => ({ title, value: id })),
     });
@@ -47,8 +47,6 @@ class App {
     this.selectedBrandId = null;
 
     this.htmlElement = foundElement;
-
-    this.initialize();
   }
 
   private handleBrandChange = (brandId: string): void => {
@@ -78,7 +76,7 @@ class App {
 
   initialize = (): void => {
     const container = document.createElement("div");
-    container.className = "container my-5";
+    container.className = "container d-flex flex-row my-5";
     container.append(this.filterByBrand.htmlElement, this.carTable.htmlElement);
 
     this.htmlElement.append(container);

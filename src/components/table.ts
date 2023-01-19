@@ -82,7 +82,7 @@ class Table<Type extends RowData> {
     this.initializeHead();
     this.initializeBody();
 
-    this.htmlElement.className = "table table-striped order border p-3";
+    this.htmlElement.className = "table table-striped order border";
     this.htmlElement.append(this.thead, this.tbody);
   };
 

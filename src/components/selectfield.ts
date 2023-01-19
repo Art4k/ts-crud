@@ -23,6 +23,7 @@ class SelectField {
   constructor(props: SelectFieldProps) {
     this.props = props;
     this.htmlElement = document.createElement("div");
+    this.htmlElement.innerHTML = "<h3> Filtravimas </h3>";
     this.htmlSelectElement = document.createElement("select");
     this.htmlLabelElement = document.createElement("label");
 
@@ -38,7 +39,7 @@ class SelectField {
     this.htmlSelectElement.className = "form-select";
     this.htmlSelectElement.id = elementId;
 
-    this.htmlElement.className = "form-group";
+    this.htmlElement.className = "form-group col-3 px-4";
     this.htmlElement.append(this.htmlLabelElement, this.htmlSelectElement);
   };
 
