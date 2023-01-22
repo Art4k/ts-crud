@@ -7,6 +7,9 @@ export type TableProps<Type> = {
   title: string;
   columns: Type;
   rowsData: Type[];
+  editedCarId: string | null;
+  onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
 };
 
 class Table<Type extends RowData> {
@@ -60,17 +63,23 @@ class Table<Type extends RowData> {
   };
 
   private initializeBody = (): void => {
-    const { rowsData, columns } = this.props;
+    const { rowsData, columns, editedCarId } = this.props;
 
     this.tbody.innerHTML = "";
     const rowsHtmlElements = rowsData.map((rowData) => {
       const rowHtmlElement = document.createElement("tr");
+
+      if (editedCarId === rowData.id) {
+        rowHtmlElement.style.backgroundColor = "#bef8fa";
+      }
 
       const cellsHtmlString = Object.keys(columns)
         .map((key) => `<td>${rowData[key]}</td>`)
         .join(" ");
 
       rowHtmlElement.innerHTML = cellsHtmlString;
+
+      this.addActionsCell(rowHtmlElement, rowData.id);
 
       return rowHtmlElement;
     });
@@ -88,6 +97,31 @@ class Table<Type extends RowData> {
 
   private renderView = (): void => {
     this.initialize();
+  };
+
+  private addActionsCell = (tr: HTMLTableRowElement, id: string) => {
+    const { onDelete, onEdit, editedCarId } = this.props;
+
+    const buttonCell = document.createElement("td");
+    buttonCell.className = "d-flex justify-content-center gap-3";
+
+    const isCancelButton = editedCarId === id;
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.innerHTML = isCancelButton ? "Cancel" : "Edit";
+    editButton.className = `btn btn-${isCancelButton ? "dark" : "warning"}`;
+    editButton.style.width = "80px";
+    editButton.addEventListener("click", () => onEdit(id));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.innerHTML = "Delete";
+    deleteButton.className = "btn btn-danger";
+    deleteButton.style.width = "80px";
+    deleteButton.addEventListener("click", () => onDelete(id));
+
+    buttonCell.append(editButton, deleteButton);
+    tr.append(buttonCell);
   };
 
   public updateProps = (newProps: Partial<TableProps<Type>>): void => {

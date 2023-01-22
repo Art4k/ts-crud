@@ -52,6 +52,10 @@ class CarsCollection {
     return brandCars;
   };
 
+  public deleteCarById = (carId: string): void => {
+    this.carList.cars = this.carList.cars.filter((car) => car.id !== carId);
+  };
+
   public add = ({ modelId, brandId, ...carProps }: CarProps): void => {
     const { models, brands, cars } = this.carList;
     const model = models.find((m) => m.id === modelId);
