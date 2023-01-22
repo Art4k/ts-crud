@@ -9,6 +9,15 @@ type CarsCollectionProps = {
   models: Model[];
 };
 
+export type CarProps = {
+  brandId: string;
+  modelId: string;
+  price: number;
+  year: number;
+};
+
+const generateId = (): string => String(Math.floor(Math.random() * 256));
+
 class CarsCollection {
   private carList: CarsCollectionProps;
 
@@ -41,6 +50,24 @@ class CarsCollection {
     const brandCars = cars.filter((car) => brandModelsIds.includes(car.modelId)).map(this.joinCar);
 
     return brandCars;
+  };
+
+  public add = ({ modelId, brandId, ...carProps }: CarProps): void => {
+    const { models, brands, cars } = this.carList;
+    const model = models.find((m) => m.id === modelId);
+    const brand = brands.find((b) => b.id === brandId);
+
+    if (!model || !brand) {
+      throw new Error("Netinkami duomenys sukurti automobilį");
+    }
+
+    const newCar: Car = {
+      id: generateId(),
+      ...carProps,
+      modelId,
+    };
+
+    cars.push(newCar);
   };
 }
 

@@ -1,5 +1,5 @@
 export type TextFieldProps = {
-  labelText: string;
+  label: string;
   name: string;
   value?: string;
 };
@@ -45,9 +45,9 @@ class TextField {
   };
 
   private renderView = (): void => {
-    const { name, labelText, value } = this.props;
+    const { name, label, value } = this.props;
 
-    this.htmlLabelElement.innerHTML = labelText;
+    this.htmlLabelElement.innerHTML = label;
     this.htmlInputElement.name = name;
     if (value) {
       this.htmlInputElement.value = value;
