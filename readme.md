@@ -6,7 +6,7 @@
 
 ## Dependency installation
 
-Open terminal in current (server/) folder and run command:
+Open terminal in current folder and run command:
 
 ```
 npm install
