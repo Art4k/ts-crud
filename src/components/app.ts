@@ -56,6 +56,7 @@ class App {
         price: "10000",
         year: "2023",
       },
+      isEdited: Boolean(this.editedCarId),
       onSubmit: this.handleCreateCar,
     });
 

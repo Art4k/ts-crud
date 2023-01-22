@@ -16,6 +16,7 @@ type CarFormProps = {
   values: Values;
   submitBtnText: string;
   onSubmit: (values: Values) => void;
+  isEdited: boolean;
 };
 
 type Fields = {
@@ -79,7 +80,7 @@ class CarForm {
 
     this.htmlSubmitBtn.className = "btn btn-primary";
 
-    this.htmlElement.className = "card d-flex flex-column gap-3 p-3";
+    this.htmlElement.className = "card d-flex flex-column gap-3 p-2";
     this.htmlElement.append(this.htmlFormHeader, this.htmlFieldsContainer, this.htmlSubmitBtn);
   };
 
@@ -111,7 +112,16 @@ class CarForm {
   };
 
   private renderView = (): void => {
-    const { title, values, submitBtnText } = this.props;
+    // eslint-disable-next-line object-curly-newline
+    const { title, values, submitBtnText, isEdited } = this.props;
+
+    if (isEdited) {
+      this.htmlElement.classList.add("border", "border-warning", "btn-warning");
+      this.htmlSubmitBtn.classList.remove("btn-success");
+    } else {
+      this.htmlElement.classList.remove("border", "border-warning", "btn-warning");
+      this.htmlSubmitBtn.classList.add("btn-success");
+    }
 
     this.htmlFormHeader.innerHTML = title;
 
